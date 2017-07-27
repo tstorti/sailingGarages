@@ -2,199 +2,281 @@
 <html>
 <head>
 	<title>Treasure Chest</title>
-	<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+	<!--Bootstrap-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/superhero/bootstrap.min.css">
+	<!--Custom styles-->
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700" rel="stylesheet">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	
+	<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
-	<script src="https://use.fontawesome.com/674c59718d.js"></script>
 	<script src="assets/js/config.js"></script>
+	<script src="assets/js/map.js"></script>
 	<script src="assets/js/list.js"></script>
 	<script src="assets/js/popup.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-11TTG_me9tMHrXJH7xHOrjLW0rsCMR4&callback=initMap"></script>
 </head>
 
 <body>
-	<div class="header"><h1><strong>Another Man's Treasure</strong></h1></div>
-	<div class="home" id="profile" style="visibility:hidden"><p><strong>Profile</strong></p></div>
-	<div class="listView" id="login"><p><strong id="login-label">Login</strong></p></div>
-	<div class="addEvent" id="addEvent"><p><strong>New Event</strong></p></div>
-	
-	<div class="main">
-		<div class="input">
-	<!--search input field is a mess. Will fix soon-->
-			<div>
-				<div>
-					<div>Keyword Search</div>
-					<input id="searchTerm" style="width: 70%;" placeholder="enter single term">
-				</div>
-				<div style="width: 20%;"># of Results:<br>
-				<form method="post">
-			        <select id="results-count" name="results-count">
-			            <option value="5">5</option>
-			            <option value="10">10</option>
-			            <option value="25">25</option>
-			            <option value="50">50</option>
-			            <option value="all">All</option>
-			        </select>
-				</form>
-				</div>
-				<div style="width: 25%">Order By:
-				<form method="post">
-			        <select id="results-order" name="results-order">
-			            <option value="popularity">Popularity</option>
-			            <option value="closest">Closest to User Location</option>
-			            <option value="map-closest">Closest to Current Map Position</option>
-			            <option value="date">Date</option>
-			            <option value="name">Name</option>
-			        </select>
-				</form>
-				</div>
-				<div style="width: 20%;">Filter Results
-				<form method="post">
-			        <select id="results-filter" name="results-filter">
-			            <option value="all">All</option>
-			            <option value="upcoming">Upcoming</option>
-			            <option value="in-progress">In Progress</option>
-			            <option value="past">Past Events</option>
-			        </select>
-				</form>
-				</div>
-				<div>
-					<button id="search">Search</button>
-				</div>
+	<!-- Page Header -->
+	<div class="container page-header">
+		<!--Nav-->
+		<div class="nav nav-pills">
+			<div class="navbar-brand">Another Man's Treasure</div>
+			<div class="navbar-right">
+				<button id="profile" style="visibility:hidden" type="button" class="btn btn-primary btn-lg btn-margin-right">Profile</button>		
+				<button id="login" type="button" class="btn btn-primary btn-lg btn-margin-right">Login</button>
+				<button id="addEvent" type="button" class="btn btn-primary btn-lg btn-margin-right">Add Event</button>
 			</div>
 		</div>
-		<div id="list">
-			<div>Press "Search" to get Listing Results</div>
-		</div>
-			<br>
-			&copy; 2017 <strong>sailingGarages</strong><br>
-			<p>Travis Cornejo, Jeremy Lipsitz, Max Rashes, Tony Storti</p><br>
-	</div>
-  
-	<!-- For Jeremy -->
-	<div id="map"></div>
-	<script src="assets/js/map.js"></script>
-   	<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-11TTG_me9tMHrXJH7xHOrjLW0rsCMR4&callback=initMap">
-    </script>
 	</div>
 
-	<div id="profile-container" style="display:none;">
-		<div class='popupContainer'></div>
-		<div class="profile popup">
+	<!--Content Container-->
+	<div class="container">	
+		<div class="row">
+			<!--Search and list scroll container-->
+			<div class="col-md-5">
+				<div class="overflow-scroll panel">
+					<!--Search Container-->
+					<div class="panel-body">
+						<form>
+							<div class="form-group">
+								<div>Keyword Search</div>
+								<input id="searchTerm" placeholder="enter single term">
+							</div>
+							<div class="form-group"># of Results:
+								<form>
+									<select id="results-count" name="results-count">
+										<option value="5">5</option>
+										<option value="10">10</option>
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="all">All</option>
+									</select>
+								</form>
+							</div>
+							<div class="form-group">Order By:
+								<form method="post">
+									<select id="results-order" name="results-order">
+										<option value="popularity">Popularity</option>
+										<option value="closest">Closest to User Location</option>
+										<option value="map-closest">Closest to Current Map Position</option>
+										<option value="date">Date</option>
+										<option value="name">Name</option>
+									</select>
+								</form>
+							</div>
+							<div class="form-group">Filter Results
+								<form method="post">
+									<select id="results-filter" name="results-filter">
+										<option value="all">All</option>
+										<option value="upcoming">Upcoming</option>
+										<option value="in-progress">In Progress</option>
+										<option value="past">Past Events</option>
+									</select>
+								</form>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-success" id="search">Search</button>
+							</div>
+						<form>
+					</div>
+					<!--List Container-->
+					<div class="panel-body" id="list">
+						<div>Press "Search" to get Listing Results</div>
+					</div>
+					<div class="panel-body">
+						<div>&copy; 2017 sailingGarages</div>
+						<div>Travis Cornejo, Jeremy Lipsitz, Max Rashes, Tony Storti</div>
+					</div>
+				</div>
+			</div>
+		
+			<!-- Google Maps -->
+			<div class="col-md-7">
+				<div id="map" class="map"></div>
+			</div>
+		</div>
+
+	</div>
+
+	<!--Profile Popup-->
+	<div class="modal" id="profile-container" style="display:none;">
+		<div class="modal-content profile">
 			<div>
-				<button id="profile-close" class="cancel">x</button>
-			</div>
-			<div class="profileItem">
-				<i class="fa fa-user-o" aria-hidden="true"></i> <span id="profile-username">User Name</span>
-			</div>
-			<div class="profileItem">
-				<i class="fa fa-info" aria-hidden="true"></i> <span id="profile-email">Email</span>
-			</div>
-			<div class="profileItem">
-				<i class="fa fa-info" aria-hidden="true"></i> <strong>About Me:</strong>
 				<div>
+					<button class="js-cancel">x</button>
+				</div>
+				<div id="profile-username">User Name</div>
+				<div id="profile-email">Email</div>
+				<div>
+					<div>About Me:</div>
 					<button id="profile-update" data-state="update">Update Profile About Me</button>
 				</div>
-				<p id="profile-about"></p>
+				<div>
+					<div id="profile-about"></div>
+				</div>
 			</div>
-			<div class="profileItem">
-				<i class="fa fa-asterisk" aria-hidden="true"></i> <span>My Events</span><br>
-			</div>
-			<div class="profileItem">
-				<strong>Hosted:</strong>
-				<div id="profile-hosted"></div>	
-			</div>
-			<br>
-			<div class="profileItem">
-				<strong>Attendnig/Attended:</strong>
-				<div id="profile-attended"></div>
+			<div>
+				<div>My Events</div>
+				<div>
+					<div>Hosted:</div>
+					<div id="profile-hosted"></div>	
+				</div>
+				<div>
+					<div>Attendnig/Attended:</div>
+					<div id="profile-attended"></div>
+				</div>
 			</div>
 		</div>
 	</div>
-  
-	<!--For Max-->
-	<div id="event" style="display:none;">
-		<div class='popupContainer'></div>
-		<div class="popup">
-			<button id="cancel" class="cancel">x</button>
-			<p>Title (required)</p>
-			<input type="text" name="title" id="title">
-			<p>Description (required)</p>
-			<input type="text" name="description" id="description">
-			<p>Dates (start required)</p>
-			<p style="display:inline;">Start -</p>
-			<input style="display: inline;" type="date" name="date" id="date">
-			<p style="display:inline;">End -</p>
-			<input style="display:inline;" type="date" name="date" id="endDate">
-			<p>Start Time (required)</p>
-			<input type="time" name="start" id="start">
-			<p>End Time (required)</p>
-			<input type="time" name="end" id="end">
-			<p>Location (required)</p>
-			<input type="text" name="location" id="location">
-			<p>Keywords</p>
-			<input type="text" name="keyword" id="keyword">
-			<p>Image</p>
-			<input type="file" name="file" id="fileInput">
+
+	<!--Add Event Popup-->
+	<div class="modal" id="event" style="display:none;">
+		<div class="new-event modal-content">
+			<div>
+				<button class="js-cancel">x</button>
+			</div>
+			<div>
+				<div>Title (required)</div>
+				<div>
+					<input type="text" name="title" id="title">
+				</div>
+			</div>
+			<div>
+				<div>Description (required)</div>
+				<div>
+					<input type="text" name="description" id="description">
+				</div>
+			</div>
+			<div>
+				<div>Description (required)</div>
+				<div>
+					<input type="text" name="description" id="description">
+				</div>
+			</div>
+			<div>
+				<div>Dates</div>
+				<div>Start (required)-</div>
+				<div>
+					<input style="display: inline;" type="date" name="date" id="date">
+				</div>
+				<div>End (optional)-</div>
+				<div>
+					<input style="display:inline;" type="date" name="date" id="endDate">
+				</div>
+			</div>
+			<div>
+				<div>Start Time (required)</div>
+				<div>
+					<input type="time" name="start" id="start">
+				</div>
+				<div>End Time (required)</div>
+				<div>
+					<input type="time" name="end" id="end">
+				</div>
+			</div>
+			<div>
+				<div>Location (required)</div>
+				<div>
+					<input type="text" name="location" id="location">
+				</div>
+			</div>
+			<div>
+				<div>Keywords</div>
+				<div>
+					<input type="text" name="keyword" id="keyword">
+				</div>
+			</div>
+			<div>
+				<div>Image</div>
+				<div>
+					<input type="file" name="file" id="fileInput">
+				</div>
+			</div>
 			<div id="validate"></div>
-			<button id="submit">create event</button>
+			<div>
+				<button id="submit">create event</button>
+			</div>
 		</div>
 	</div>
-	<div id="login-popup" style="display:none;">
-		<div class='popupContainer'></div>
-		<div class="popup login">
-			<button id="cancel2" class="cancel">x</button>
-			Login with your email and password
+
+	<!--Login Popup-->
+	<div class="modal" id="login-popup" style="display:none;">
+		<div class="modal-content login">
 			<div>
-				<input placeholder="email address" id="username">
+				<button class="js-cancel">x</button>
 			</div>
 			<div>
-				<input placeholder="password" id="password">
+				<div>Login with your email and password</div>
+				<div>
+					<input placeholder="email address" id="username">
+				</div>
+				<div>
+					<input placeholder="password" id="password">
+				</div>
 			</div>
-			<button id="login-user-submit">Login</button>
-			<button id="cancel-user-submit">Cancel</button>
-			<button id="password-reset">Forgot Password</button>
-			<button id="add-user-submit">Add New User</button>
+			<div>
+				<button id="login-user-submit">Login</button>
+				<button id="cancel-user-submit">Cancel</button>
+				<button id="password-reset">Forgot Password</button>
+				<button id="add-user-submit">Add New User</button>
+			</div>
 			<div id="error-login"></div>
 		</div>
 	</div>
-	<div id="newUser-popup" style="display:none;">
-		<div class='popupContainer'></div>
-		<div class="popup newUser">
-			<button id="cancel3" class="cancel">x</button>
-			Create new account with your email and password
+
+	<!--New User Popup-->
+	<div class="modal" id="newUser-popup" style="display:none;">
+		<div class="modal-content login">
 			<div>
-				<input placeholder="username" id="newUsername">
+				<button class="js-cancel">x</button>
 			</div>
 			<div>
-				<input placeholder="password" id="newPassword">
+				<div>Create new account with your email and password</div>
+				<div>
+					<input placeholder="username" id="newUsername">
+				</div>
+				<div>
+					<input placeholder="password" id="newPassword">
+				</div>
+				<div>
+					<input placeholder="confirm password" id="confirmNewPassword">
+				</div>
 			</div>
 			<div>
-				<input placeholder="confirm password" id="confirmNewPassword">
+				<button id="cancel-user-submit">Cancel</button>
+				<button id="create-user-submit">Add New User</button>
 			</div>
-			<button id="cancel-user-submit">Cancel</button>
-			<button id="create-user-submit">Add New User</button>
 			<div id="error-submit"></div>
 		</div>
 	</div>
-	<div id="comments-popup" style="display:none;">
-		<div class='popupContainer'></div>
-		<div class="popup comments">
+
+	<!--Comments Thread Popup-->
+	<div class="modal" id="comments-popup" style="display:none;">
+		<div class="modal-content comments">
+			<div>
+				<button class="js-cancel">x</button>
+			</div>
 			<div>
 				<div>Comments Thread for event:</div>
 				<div id="comments-name"></div>
-				<br>
 			</div>
-			<div id="comments"></div>
+			<div>
+				<div id="comments"></div>
+			</div>
 			<div>
 				<input placeholder="Add Comment" id="comments-new">
 			</div>
-			<button id="comments-submit">Submit</button>
-			<button id="comments-close">Close</button>
+			<div>
+				<button id="comments-submit">Submit</button>
+				<button id="comments-close">Close</button>
+			</div>
 		</div>
 	</div>
+	
+	
 </body>
 </html>

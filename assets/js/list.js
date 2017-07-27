@@ -204,11 +204,11 @@ var app ={
 	//this function updates the page display based on on if a user is logged in or not
 	changeUserStatus:function(){
 		if(firebase.auth().hc===null){
-			$("#login-label").text("Login");
+			$("#login").text("Login");
 			$("#profile").attr("style","visibility: hidden");
 		}
 		else{
-			$("#login-label").text("Logout");
+			$("#login").text("Logout");
 			$("#profile").attr("style","visibility: visible");
 		}
 	},
@@ -375,21 +375,21 @@ var app ={
 			var rsvpBtn=$("<button>");
 			var showBtn=$("<button>");
 			//add classes per designer requirements
-			newListItemContainer.addClass("sale");
-			containerName.addClass("saleName");
-			containerAddress.addClass("saleAddress");
-			containerDate.addClass("saleDate");
-			containerStartTime.addClass("saleStart");
-			containerEndTime.addClass("saleEnd");
-			containerOrganizer.addClass("saleOrganizer");
-			containerAttendees.addClass("saleAttendees");
-			containerDescription.addClass("saleDescription");
-			containerImage.addClass("saleImage");
-			containerKeywords.addClass("saleKeywords");
-			containerDistance.addClass("saleDistance");
-			rsvpBtn.addClass("rsvpBtn");
-			showBtn.addClass("showBtn");
-			commentsBtn.addClass("commentsBtn");
+			newListItemContainer.addClass("list-container");
+			// containerName.addClass("saleName");
+			// containerAddress.addClass("saleAddress");
+			// containerDate.addClass("saleDate");
+			// containerStartTime.addClass("saleStart");
+			// containerEndTime.addClass("saleEnd");
+			// containerOrganizer.addClass("saleOrganizer");
+			// containerAttendees.addClass("saleAttendees");
+			// containerDescription.addClass("saleDescription");
+			// containerImage.addClass("saleImage");
+			// containerKeywords.addClass("saleKeywords");
+			// containerDistance.addClass("saleDistance");
+			rsvpBtn.addClass("btn btn-success btn-margin-bot");
+			showBtn.addClass("btn btn-info btn-margin-bot");
+			commentsBtn.addClass("btn btn-success btn-margin-bot");
 
 			//append different sections into subsection containers
 			containerName.append(nameHeader);
@@ -649,7 +649,7 @@ var app ={
 		firebase.auth().signOut().then(function() {
 			// Sign-out successful.
 			$("#profile").attr("style","visibility:hidden");
-			$("#login-label").text("Login");
+			$("#login").text("Login");
 		}).catch(function(error) {
 			// An error happened.
 		});
@@ -974,7 +974,7 @@ $(document).on("click", ".js-rsvp", function () {
 
 //listener to open the login popup or log out user depending on userStatus
 $(document).on('click', '#login', function() {
-	if($("#login-label").text() === "Login"){
+	if($("#login").text() === "Login"){
 		$("#login-popup").show();
 	}
 	else{
@@ -1032,11 +1032,6 @@ $(document).on('click', '.js-expand', function() {
 $(document).on('click', '#profile', function() {
 		$("#profile-container").show();
 		app.populateProfile();
-});
-
-//listener to close user profile
-$(document).on('click', '#profile-close', function() {
-		$("#profile-container").hide();
 });
 
 //listener to update profile "about me" section for each user

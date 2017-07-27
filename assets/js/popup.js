@@ -221,11 +221,8 @@ $(document).on('click', '#submit', function() {
 });
 
 //clicking the button in the corner of modal pops it all away
-$(document).on('click', '.cancel', function() {
+$(document).on('click', '.js-cancel', function() {
 	popup.popDown()
 });
 
-//clicking the black space around the popup makes it disappear
-$(document).on('click', '.popupContainer', function() {
-	popup.popDown();
-});
+
